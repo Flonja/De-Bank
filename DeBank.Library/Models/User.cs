@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DeBank.Library
+namespace DeBank.Library.Models
 {
     public class User
     {

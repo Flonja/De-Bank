@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 
-namespace DeBank.Library
+namespace DeBank.Library.Models
 {
     public class BankAccount
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public decimal Money { get; private set; }
+        public decimal Money { get; internal set; }
 
         public event EventHandler<string> LogAppended;
 
