@@ -21,10 +21,14 @@
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method
             //  to avoid creating duplicate seed data.
 
-            List<BankAccount> accounts = new List<BankAccount>();
-            accounts.Add(new BankAccount { Name = "Persoonlijke Kaart", Money = 100 });
+            List<BankAccount> accounts1 = new List<BankAccount>();
+            accounts1.Add(new BankAccount { Name = "Persoonlijke Kaart", Money = 100 });
 
-            context.Users.AddOrUpdate(new User { Name = "Vanja van Essen", Accounts = accounts });
+            List<BankAccount> accounts2 = new List<BankAccount>();
+            accounts2.Add(new BankAccount { Name = "Persoonlijke Kaart", Money = 100 });
+
+            context.Users.AddOrUpdate(new User { Name = "Vanja van Essen", Accounts = accounts1 });
+            context.Users.AddOrUpdate(new User { Name = "Luna Herder", Accounts = accounts2 });
             context.SaveChanges();
         }
     }

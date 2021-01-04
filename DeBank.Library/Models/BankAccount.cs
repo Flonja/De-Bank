@@ -1,55 +1,25 @@
-﻿using System;
-using System.Threading;
+﻿using DeBank.Library.Logic;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DeBank.Library.Models
 {
     public class BankAccount
     {
         public int Id { get; set; }
+        public User Owner { get; set; }
         public string Name { get; set; }
         public decimal Money { get; internal set; }
+        public List<Transaction> PreviousTransactions = new List<Transaction>();
 
-        public event EventHandler<string> LogAppended;
+        [NotMapped]
+        public List<Transaction> TransactionQueue = new List<Transaction>();
+        public event EventHandler<string> TransactionLog;
 
-        public bool AddMoney(decimal money, string reason = "")
+        public void Log(object sender, string line)
         {
-            Thread.Sleep(5 * 1000);
-
-            Money += money;
-
-            if (reason != "") LogAppended?.Invoke(this, reason);
-            return true;
-        }
-
-        public bool TransferMoney(BankAccount bankAccount, decimal money, string reason = "")
-        {
-            if(Money - money < 0)
-            {
-                return false;
-            }
-
-            Thread.Sleep(5 * 1000);
-
-            Money -= money;
-            bankAccount.Money += money;
-
-            if (reason != "") LogAppended?.Invoke(this, reason);
-            return true;
-        }
-
-        public bool SpendMoney(decimal money, string reason = "")
-        {
-            if (Money - money < 0)
-            {
-                return false;
-            }
-
-            Thread.Sleep(5 * 1000);
-
-            Money -= money;
-
-            if (reason != "") LogAppended?.Invoke(this, reason);
-            return true;
+            TransactionLog?.Invoke(this, line);
         }
     }
 }
