@@ -7,7 +7,8 @@ namespace DeBank.Library.Models
 {
     public class BankAccount
     {
-        public int Id { get; set; }
+        [key]
+        public string Id { get; set; }
         public User Owner { get; set; }
         public string Name { get; set; }
         public decimal Money { get; internal set; }
