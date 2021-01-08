@@ -29,5 +29,12 @@ namespace DeBank.Library.GeneralMethods
             // write messagebox dependant on front end platform
             //<summary>
         }
+
+        public static void ShowIncorrectValueErrorMessage()
+        {
+            //<summary>
+            // write messagebox dependant on front end platform
+            //<summary>
+        }
     }
 }

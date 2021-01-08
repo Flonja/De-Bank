@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using System.Transactions;
 
 namespace DeBank.Library.Logic
 {
@@ -18,94 +19,7 @@ namespace DeBank.Library.Logic
                 return false;
             }
 
-            Transaction transaction = new Transaction { Account = account, Amount = money, Reason = reason };
-            transaction.TransactionLog += account.Log;
-            account.TransactionQueue.Add(transaction);
-            bool result = await transaction.Queue();
-            account.TransactionQueue.Remove(transaction);
-
-            account.PreviousTransactions.Add(transaction);
-
-
-
-            return result;
-        }
-
-        //<summary>
-        //added code
-        //<summary>
-        public static async void AddUser(string Name)
-        {
-            var lockingobject = new object();
-            Monitor.Enter(lockingobject);
-            try
-            {
-                await Task.Run(() =>
-                {
-                    Interfaces.IDataService _dataService = DataService.GetDataService();
-                    User user = new User()
-                    {
-                        Name = Name,
-                        Accounts = new List<BankAccount>()
-                        { }
-                    };
-                    _dataService.AddUser(user);
-                });
-            }
-#pragma warning disable CS0168 // Variable is declared but never used
-            catch (Exception ex)
-#pragma warning restore CS0168 // Variable is declared but never used
-            {
-                GeneralMethods.GeneralMethods.ShowGeneralErrorMessage();
-            }
-            finally
-            {
-                Monitor.Exit(lockingobject);
-            }
-        }
-
-        public static async void AddBankAccount(User owner,string name, decimal money)
-        {
-            var lockingobject = new object();
-            Monitor.Enter(lockingobject);
-            try
-            {
-                await Task.Run(() =>
-                {
-                    Interfaces.IDataService _dataService = DataService.GetDataService();
-                    BankAccount user = new BankAccount()
-                    {
-                        Money = money,
-                        Name = name, 
-                        Owner = owner
-                    };
-                    _dataService.AddBankaccounts(user);
-                });
-            }
-#pragma warning disable CS0168 // Variable is declared but never used
-            catch (Exception ex)
-#pragma warning restore CS0168 // Variable is declared but never used
-            {
-                GeneralMethods.GeneralMethods.ShowGeneralErrorMessage();
-            }
-            finally
-            {
-                Monitor.Exit(lockingobject);
-            }
-        }
-
-        //<summary>
-        //added code
-        //<summary>
-        public static async Task<bool> AddMoney(BankAccount account, decimal money, BankAccount opossiteAccount, string reason = "")
-        {
-            Interfaces.IDataService _dataService = DataService.GetDataService();
-            if (money < 0)
-            {
-                return false;
-            }
-
-            Transaction transaction = new Transaction { Account = account, Amount = money, Reason = reason };
+            Transaction transaction = new Transaction { Account = account, Amount = money, Reason = reason, dummytransaction = false, id = Guid.NewGuid().ToString(), date = DateTime.Now };
             transaction.TransactionLog += account.Log;
             account.TransactionQueue.Add(transaction);
             bool result = await transaction.Queue();
@@ -114,39 +28,245 @@ namespace DeBank.Library.Logic
             account.PreviousTransactions.Add(transaction);
 
             //<summary>
-            //added code
+            //added code start
             //<summary>
-
-            Transaction oppossitetransaction = new Transaction { Account = opossiteAccount, Amount = -money, Reason = reason };
-            transaction.TransactionLog += opossiteAccount.Log;
-            opossiteAccount.TransactionQueue.Add(oppossitetransaction);
-            result = await oppossitetransaction.Queue();
-            opossiteAccount.TransactionQueue.Remove(oppossitetransaction);
-            opossiteAccount.PreviousTransactions.Add(oppossitetransaction);
-
             _dataService.AddTransaction(transaction);
-            _dataService.UpdateBank(opossiteAccount);
             _dataService.UpdateBank(account);
             var UserSuperAccount = _dataService.ReturnAllUsers().Where(a => a.Accounts.Where(a => a.Id == account.Id).Any()).FirstOrDefault();
-            var OppositeUserSuperAccount = _dataService.ReturnAllUsers().Where(a => a.Accounts.Where(a => a.Id == opossiteAccount.Id).Any()).FirstOrDefault();
             _dataService.UpdateUser(UserSuperAccount);
-            _dataService.UpdateUser(OppositeUserSuperAccount);
-
             //<summary>
-            //added code
+            //added code end
             //<summary>
 
             return result;
         }
 
+        //<summary>
+        //added code start
+        //<summary>
+        public static async void AddUser(string Name, bool dummyornot)
+        {
+            var lockingobject = new object();
+            Monitor.Enter(lockingobject);
+            try
+            {
+                if (dummyornot == false)
+                {
+                    await Task.Run(() =>
+                    {
+                        Interfaces.IDataService _dataService = DataService.GetDataService();
+                        User user = new User()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Name = Name,
+                            Accounts = new List<BankAccount>()
+                            { },
+                            dummyaccount = false,
+                            dateofcreation = DateTime.Now
+                        };
+                        _dataService.AddUser(user);
+                    });
+                }
+                else
+                {
+                    await Task.Run(() =>
+                    {
+                        Interfaces.IDataService _dataService = DataService.GetDataService();
+                        User user = new User()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Name = Name,
+                            Accounts = new List<BankAccount>()
+                            { },
+                            dummyaccount = true,
+                            dateofcreation = DateTime.Now
+                        };
+                        _dataService.AddUser(user);
+                    });
+                }
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+            {
+                GeneralMethods.GeneralMethods.ShowGeneralErrorMessage();
+            }
+            finally
+            {
+                Monitor.Exit(lockingobject);
+            }
+        }
+
+        public static async void AddBankAccount(User owner,string name, decimal money, bool dummyornot)
+        {
+            var lockingobject = new object();
+            Monitor.Enter(lockingobject);
+            try
+            {
+                if (dummyornot == false)
+                {
+                    await Task.Run(() =>
+                    {
+                        Interfaces.IDataService _dataService = DataService.GetDataService();
+                        BankAccount user = new BankAccount()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Money = money,
+                            Name = name,
+                            Owner = owner,
+                            dummyaccount = false,
+                            dateofcreation = DateTime.Now
+                        };
+                        _dataService.AddBankaccounts(user);
+                    });
+                }
+                else
+                {
+                    await Task.Run(() =>
+                    {
+                        Interfaces.IDataService _dataService = DataService.GetDataService();
+                        BankAccount user = new BankAccount()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Money = money,
+                            Name = name,
+                            Owner = owner,
+                            dummyaccount = false,
+                            dateofcreation = DateTime.Now
+                        };
+                        _dataService.AddBankaccounts(user);
+                    });
+                }
+            }
+#pragma warning disable CS0168 // Variable is declared but never used
+            catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+            {
+                GeneralMethods.GeneralMethods.ShowGeneralErrorMessage();
+            }
+            finally
+            {
+                Monitor.Exit(lockingobject);
+            }
+        }
+
+        public static async void AutomatedRecurringPayments(decimal price, int amountoftimespayment) //required project assignment
+        {
+            
+            var lockingobject = new object();
+            Monitor.Enter(lockingobject);
+            using (var transactionrollback = new TransactionScope())
+            {
+                BankAccount DummyFromAccount = new BankAccount()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Money = 1000000,
+                    Name = "test",
+                    dummyaccount = true,
+                    dateofcreation = DateTime.Now
+                };
+
+                BankAccount DummyToAccount = new BankAccount()
+                {
+                     Id = Guid.NewGuid().ToString(),
+                     dummyaccount = true,
+                     Money = 1000000,
+                     Name = "test",
+                     dateofcreation = DateTime.Now
+                };
+                try
+                {
+                    for (int a = 0; a < amountoftimespayment; a++)
+                    {
+                        Thread.Sleep(25000);
+                        await AddMoney(DummyToAccount, price);
+                        await SpendMoney(DummyFromAccount, price);
+                    }
+                }
+#pragma warning disable CS0168 // Variable is declared but never used
+                catch (NullReferenceException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+                {
+                    GeneralMethods.GeneralMethods.ShowIncorrectValueErrorMessage();
+                }
+#pragma warning disable CS0168 // Variable is declared but never used
+                catch (ArgumentNullException ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+                {
+                    GeneralMethods.GeneralMethods.ShowIncorrectValueErrorMessage();
+                }
+#pragma warning disable CS0168 // Variable is declared but never used
+                catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+                {
+                    GeneralMethods.GeneralMethods.ShowGeneralErrorMessage();
+                }
+                finally
+                {
+                    Monitor.Exit(lockingobject);
+                }
+            }
+        }
+#nullable enable
+        public static async Task<List<Logic.Transaction>>? ReturnTransactionsWithinTimeFrame(BankAccount user, int timeinseconds, Enums.PositiveNegativeOrAllTransactions positivenegativeornotransactioncheck)
+        {
+            return await Task.Run(() =>
+            {
+                var date = DateTime.Now.AddSeconds(-timeinseconds);
+                var item = user.PreviousTransactions.Where(a => a.date > date).ToList();
+                if (positivenegativeornotransactioncheck == Enums.PositiveNegativeOrAllTransactions.none)
+                {
+                    return item;
+                }
+                if (positivenegativeornotransactioncheck == Enums.PositiveNegativeOrAllTransactions.positive)
+                {
+                    return item.Where(a => a.Amount > 0).ToList();
+                }
+                else
+                {
+                    return item.Where(a => a.Amount < 0).ToList();
+                }
+            }
+            );
+        }
+
+
+        public static async Task<List<BankAccount>>? ReturnAllusersBeneathOrAboveGivenValue(decimal saldolimit, bool AboveValue)
+        {
+            Interfaces.IDataService _dataService = DataService.GetDataService();
+
+            if (AboveValue == true)
+            {
+                return await Task.Run(() =>
+                {
+                    return _dataService.ReturnAllBankAccounts().Where(a => a.Money > saldolimit).ToList();
+                }
+                );
+            }
+            else
+            {
+                return await Task.Run(() =>
+                {
+                    return _dataService.ReturnAllBankAccounts().Where(a => a.Money < saldolimit).ToList();
+                }
+               );
+            }
+        }
+
+#nullable disable
+        //<summary>
+        //added code end
+        //<summary>
         public static async Task<bool> SpendMoney(BankAccount account, decimal money, bool subscription = false, string reason = "")
         {
+            Interfaces.IDataService _dataService = DataService.GetDataService();
+
             if (money < 0)
             {
                 return false;
             }
 
-            Transaction transaction = new Transaction { Account = account, Amount = -money, Reason = reason, MayExecuteMore = subscription };
+            Transaction transaction = new Transaction { Account = account, Amount = -money, Reason = reason, MayExecuteMore = subscription , id = Guid.NewGuid().ToString(), dummytransaction = false, date = DateTime.Now};
             transaction.TransactionLog += account.Log;
 
             account.TransactionQueue.Add(transaction);
@@ -154,12 +274,25 @@ namespace DeBank.Library.Logic
             account.TransactionQueue.Remove(transaction);
 
             account.PreviousTransactions.Add(transaction);
+
+            //<summary>
+            //added code start
+            //<summary>
+            _dataService.AddTransaction(transaction);
+            _dataService.UpdateBank(account);
+            var UserSuperAccount = _dataService.ReturnAllUsers().Where(a => a.Accounts.Where(a => a.Id == account.Id).Any()).FirstOrDefault();
+            _dataService.UpdateUser(UserSuperAccount);
+            //<summary>
+            //added code end
+            //<summary>
 
             return result;
         }
 
         public static async Task<bool> TransferMoney(BankAccount account1, BankAccount account2, decimal money, string reason = "")
         {
+            Interfaces.IDataService _dataService = DataService.GetDataService();
+
             if (money < 0)
             {
                 return false;

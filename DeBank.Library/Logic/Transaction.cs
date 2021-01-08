@@ -11,13 +11,14 @@ namespace DeBank.Library.Logic
         public BankAccount Account { get; set; }
         public decimal Amount { get; set; }
         public string Reason { get; set; }
-
+        public bool dummytransaction { get; set; }
         public bool MayExecuteMore { get; set; }
         public bool AlreadyExecuted { get; private set; }
+        public DateTime date { get; set; }
 
         public event EventHandler<string> TransactionLog;
 
-        public BankAccount RecievingAccount { get; set; }
+        //public BankAccount RecievingAccount { get; set; }
 
 
         public async Task<bool> Queue()
