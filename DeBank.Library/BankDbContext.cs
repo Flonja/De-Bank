@@ -8,11 +8,6 @@ namespace DeBank.Library
     {
         private static BankDbContext _dbContext;
 
-        public BankDbContext()
-        {
-
-        }
-
         public static BankDbContext GetDbContext()
         {
             if (_dbContext != null)

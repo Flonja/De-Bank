@@ -1,8 +1,10 @@
 ﻿using DeBank.Library.Models;
+using DeBank.Library.DAL;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DeBank.Library.Logic
 {
@@ -10,7 +12,7 @@ namespace DeBank.Library.Logic
     {
         public static async Task<bool> AddMoney(BankAccount account, decimal money, string reason = "")
         {
-            Interfaces.IDataService _dataService = DAL.DataService.GetDataService();
+            Interfaces.IDataService _dataService = DataService.GetDataService();
             if (money < 0)
             {
                 return false;
@@ -40,12 +42,11 @@ namespace DeBank.Library.Logic
             {
                 await Task.Run(() =>
                 {
-                    Interfaces.IDataService _dataService = DAL.DataService.GetDataService();
+                    Interfaces.IDataService _dataService = DataService.GetDataService();
                     User user = new User()
                     {
-                        Id = Guid.NewGuid().ToString(),
                         Name = Name,
-                        Accounts = new System.Collections.Generic.List<BankAccount>()
+                        Accounts = new List<BankAccount>()
                         { }
                     };
                     _dataService.AddUser(user);
@@ -71,10 +72,9 @@ namespace DeBank.Library.Logic
             {
                 await Task.Run(() =>
                 {
-                    Interfaces.IDataService _dataService = DAL.DataService.GetDataService();
+                    Interfaces.IDataService _dataService = DataService.GetDataService();
                     BankAccount user = new BankAccount()
                     {
-                        Id = Guid.NewGuid().ToString(),
                         Money = money,
                         Name = name, 
                         Owner = owner
@@ -99,7 +99,7 @@ namespace DeBank.Library.Logic
         //<summary>
         public static async Task<bool> AddMoney(BankAccount account, decimal money, BankAccount opossiteAccount, string reason = "")
         {
-            Interfaces.IDataService _dataService = DAL.DataService.GetDataService();
+            Interfaces.IDataService _dataService = DataService.GetDataService();
             if (money < 0)
             {
                 return false;
@@ -173,7 +173,5 @@ namespace DeBank.Library.Logic
 
             return result;
         }
-
-
     }
 }

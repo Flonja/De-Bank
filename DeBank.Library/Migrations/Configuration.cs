@@ -7,14 +7,14 @@
     using DeBank.Library.Models;
     using System.Collections.Generic;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<DeBank.Library.BankDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<BankDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(DeBank.Library.BankDbContext context)
+        protected override void Seed(BankDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -1,8 +1,6 @@
-﻿using DeBank.Library.DAL;
+﻿using DeBank.Library.Logic;
 using DeBank.Library.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DeBank.Library.Interfaces
 {
@@ -11,15 +9,15 @@ namespace DeBank.Library.Interfaces
 
         bool AddUser(User user);
         bool AddBankaccounts(BankAccount bank);
-        bool AddTransaction(Logic.Transaction transaction);
+        bool AddTransaction(Transaction transaction);
         bool RemoveUser(User user);
         bool RemoveBankaccounts(BankAccount bank);
-        bool RemoveTransaction(Logic.Transaction transaction);
+        bool RemoveTransaction(Transaction transaction);
         List<User> ReturnAllUsers();
         List<BankAccount> ReturnAllBankAccounts();
-        List<Logic.Transaction> ReturnAllTransactions();
+        List<Transaction> ReturnAllTransactions();
         bool UpdateUser(User user);
         bool UpdateBank(BankAccount bank);
-        bool UpdateTransactions(Logic.Transaction transaction);
+        bool UpdateTransactions(Transaction transaction);
     }
 }
