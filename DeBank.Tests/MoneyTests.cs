@@ -103,9 +103,7 @@ namespace DeBank.Tests
                   }
                 }
             };
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            NUnit.Framework.Assert.DoesNotThrow(() =>  BankLogic.ReturnTransactionsWithinTimeFrame(account, 100, Library.Enums.PositiveNegativeOrAllTransactions.none));
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            NUnit.Framework.Assert.DoesNotThrow(async() => await BankLogic.ReturnTransactionsWithinTimeFrame(account, 100, Library.Enums.PositiveNegativeOrAllTransactions.none));
 
         }
 
@@ -113,9 +111,29 @@ namespace DeBank.Tests
         [TestCategory("HRTesting")]
         public void TestReturnAllUsersBeneathOraboveGivenValue()
         {
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-            NUnit.Framework.Assert.DoesNotThrow(() => BankLogic.ReturnAllusersBeneathOrAboveGivenValue(100, true));
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            NUnit.Framework.Assert.DoesNotThrow(async() => await BankLogic.ReturnAllusersBeneathOrAboveGivenValue(100, true));
+        }
+
+        [TestMethod]
+        [TestCategory("HRTesting")]
+        public void TestReturnAllUserSortedOnName()
+        {
+            NUnit.Framework.Assert.DoesNotThrow(async() => await BankLogic.ReturnAllUsersSortedOnName());
+        }
+
+        [TestMethod]
+        [TestCategory("HRTesting")]
+        public void TestReturnAllUserSortedOnSaldo()
+        {
+            NUnit.Framework.Assert.DoesNotThrow(async () => await BankLogic.ReturnAllUsersSortedOnSaldo());
+        }
+
+
+        [TestMethod]
+        [TestCategory("HRTesting")]
+        public void TestReturnAllUserSortedOndateOfCreation()
+        {
+            NUnit.Framework.Assert.DoesNotThrow(async () => await BankLogic.ReturnAllUsersSortedOnDateOfCreation());
         }
     }
 }
