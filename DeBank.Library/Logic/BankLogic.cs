@@ -46,7 +46,7 @@ namespace DeBank.Library.Logic
         //<summary>
         //added code start
         //<summary>
-        public static async void AddUser(string Name, bool dummyornot)
+        public static async Task AddUser(string Name, bool dummyornot)
         {
             var lockingobject = new object();
             Monitor.Enter(lockingobject);
@@ -99,7 +99,7 @@ namespace DeBank.Library.Logic
             }
         }
 
-        public static async void AddBankAccount(User owner,string name, decimal money, bool dummyornot)
+        public static async Task AddBankAccount(User owner,string name, decimal money, bool dummyornot)
         {
             var lockingobject = new object();
             Monitor.Enter(lockingobject);
@@ -152,7 +152,7 @@ namespace DeBank.Library.Logic
             }
         }
 
-        public static async void AutomatedRecurringPayments(decimal price, int amountoftimespayment) //required project assignment
+        public static async Task AutomatedRecurringPayments(decimal price, int amountoftimespayment) //required project assignment
         {
             
             var lockingobject = new object();
@@ -206,6 +206,7 @@ namespace DeBank.Library.Logic
                 finally
                 {
                     Monitor.Exit(lockingobject);
+
                 }
             }
         }
@@ -229,6 +230,7 @@ namespace DeBank.Library.Logic
                 else
                 {
                     return item.Where(a => a.Amount < 0).ToList();
+
                 }
             }
             );
