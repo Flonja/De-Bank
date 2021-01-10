@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DeBank.Library.Models;
 using DeBank.Library.Logic;
 using System;
+using DeBank.Library.DAL;
 
 namespace DeBank.Tests
 {
@@ -56,6 +57,25 @@ namespace DeBank.Tests
         }
 
         [TestMethod]
+        [TestCategory("CategorizationStructure")]
+        [DynamicData(nameof(Library.CSVToIEnumerable.NamesConverter.TestNamesConverter), typeof(Library.CSVToIEnumerable.NamesConverter))]
+        public void TestDALFunctions(string names)
+        {
+            Library.Interfaces.IDataService _dataService = DataService.GetDataService();
+
+            BankAccount user = new BankAccount()
+            {
+                Id = Guid.NewGuid().ToString(),
+                dateofcreation = DateTime.Now,
+                dummyaccount = true,
+                Name = names,
+            };
+
+            NUnit.Framework.Assert.DoesNotThrow(() => _dataService.AddBankaccounts(user));
+            
+        }
+
+        [TestMethod]
         [TestCategory("HRTesting")]
         public void TestAutomatedReccuringPayments()
         {
@@ -82,6 +102,8 @@ namespace DeBank.Tests
             };
             NUnit.Framework.Assert.DoesNotThrow(() => BankLogic.AddBankAccount(user, "test", 1000000, true));
         }
+
+
 
         [TestMethod]
         [TestCategory("HRTesting")]
