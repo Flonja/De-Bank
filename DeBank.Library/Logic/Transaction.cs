@@ -12,6 +12,7 @@ namespace DeBank.Library.Logic
         public BankAccount Account { get; set; }
         public decimal Amount { get; set; }
         public string Reason { get; set; }
+        public bool dummytransaction { get; set; }
         public DateTime LastExecuted { get; set; }
 
         public bool MayExecuteMore { get; set; }
@@ -19,7 +20,7 @@ namespace DeBank.Library.Logic
 
         public event EventHandler<string> TransactionLog;
 
-        public BankAccount RecievingAccount { get; set; }
+        //public BankAccount RecievingAccount { get; set; }
 
 
         public async Task<bool> Queue()
