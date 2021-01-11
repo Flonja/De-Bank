@@ -126,9 +126,9 @@ namespace DeBank.Tests
                 {
                   new Transaction()
                   { 
-                   id = Guid.NewGuid().ToString(),
+                   Id = Guid.NewGuid().ToString(),
                    Amount = 100,
-                   date = DateTime.Now,
+                   LastExecuted = DateTime.Now,
                    dummytransaction = true,
                   }
                 }

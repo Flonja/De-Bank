@@ -21,7 +21,7 @@ namespace DeBank.Library.Logic
                 return false;
             }
 
-            Transaction transaction = new Transaction { Account = account, Amount = money, Reason = reason, dummytransaction = false, id = Guid.NewGuid().ToString(), date = DateTime.Now };
+            Transaction transaction = new Transaction { Account = account, Amount = money, Reason = reason, dummytransaction = false, Id = Guid.NewGuid().ToString(), LastExecuted = DateTime.Now };
             transaction.TransactionLog += account.Log;
             account.TransactionQueue.Add(transaction);
             bool result = await transaction.Queue();
@@ -218,7 +218,7 @@ namespace DeBank.Library.Logic
                 return await Task.Run(() =>
             {
                 var date = DateTime.Now.AddSeconds(-timeinseconds);
-                var item = user.PreviousTransactions.Where(a => a.date > date).ToList();
+                var item = user.PreviousTransactions.Where(a => a.LastExecuted > date).ToList();
                 if (positivenegativeornotransactioncheck == Enums.PositiveNegativeOrAllTransactions.none)
                 {
                     return item;
@@ -572,7 +572,7 @@ namespace DeBank.Library.Logic
                 return false;
             }
 
-            Transaction transaction = new Transaction { Account = account, Amount = -money, Reason = reason, MayExecuteMore = subscription , id = Guid.NewGuid().ToString(), dummytransaction = false, date = DateTime.Now};
+            Transaction transaction = new Transaction { Account = account, Amount = -money, Reason = reason, MayExecuteMore = subscription , Id = Guid.NewGuid().ToString(), dummytransaction = false, LastExecuted = DateTime.Now};
             transaction.TransactionLog += account.Log;
 
             account.TransactionQueue.Add(transaction);
