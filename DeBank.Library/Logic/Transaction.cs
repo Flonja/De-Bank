@@ -1,16 +1,18 @@
 ﻿using DeBank.Library.Models;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace DeBank.Library.Logic
 {
     public class Transaction
     {
-        [key]
-        public string id { get; set; }
+        [Key]
+        public string Id { get; set; }
         public BankAccount Account { get; set; }
         public decimal Amount { get; set; }
         public string Reason { get; set; }
+        public DateTime LastExecuted { get; set; }
 
         public bool MayExecuteMore { get; set; }
         public bool AlreadyExecuted { get; private set; }
@@ -43,6 +45,7 @@ namespace DeBank.Library.Logic
 
             Account.Money += Amount;
             AlreadyExecuted = true;
+            LastExecuted = DateTime.Now;
 
             TransactionLog?.Invoke(this, "Transactie voltooid" + (Reason != "" ? ": " + Reason : ""));
             return true;

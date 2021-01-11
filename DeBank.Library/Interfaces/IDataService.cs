@@ -1,4 +1,5 @@
-﻿using DeBank.Library.Logic;
+﻿using DeBank.Library.GeneralMethods;
+using DeBank.Library.Logic;
 using DeBank.Library.Models;
 using System.Collections.Generic;
 
@@ -6,7 +7,6 @@ namespace DeBank.Library.Interfaces
 {
     public interface IDataService
     {
-
         bool AddUser(User user);
         bool AddBankaccounts(BankAccount bank);
         bool AddTransaction(Transaction transaction);
@@ -19,5 +19,8 @@ namespace DeBank.Library.Interfaces
         bool UpdateUser(User user);
         bool UpdateBank(BankAccount bank);
         bool UpdateTransactions(Transaction transaction);
+        Filter<Transaction> ReturnLatestTransactions(int seconds, BankAccount account = null);
+        Filter<Transaction> ReturnLatestTransactions(NumberEnums number, int seconds = -1, BankAccount account = null);
+        Filter<BankAccount> ReturnAllBankAccountsUnder(decimal thresholdMoney);
     }
 }

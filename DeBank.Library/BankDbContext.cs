@@ -1,6 +1,6 @@
-﻿using DeBank.Library.Models;
+﻿using DeBank.Library.Logic;
+using DeBank.Library.Models;
 using System.Data.Entity;
-using System.Transactions;
 
 namespace DeBank.Library
 {
@@ -18,6 +18,6 @@ namespace DeBank.Library
         }
         public DbSet<User> Users { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
-        public DbSet<Logic.Transaction> Transactions {get;set;}
+        public DbSet<Transaction> Transactions { get; set; }
     }
 }

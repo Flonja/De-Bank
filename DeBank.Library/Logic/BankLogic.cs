@@ -26,8 +26,6 @@ namespace DeBank.Library.Logic
 
             account.PreviousTransactions.Add(transaction);
 
-
-
             return result;
         }
 

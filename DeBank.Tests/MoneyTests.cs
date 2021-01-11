@@ -49,7 +49,15 @@ namespace DeBank.Tests
             BankLogic.SpendMoney(user1.Accounts[0], 10).Wait();
 
             BankLogic.SpendMoney(user1.Accounts[0], 10, true).Wait();
-            user1.Accounts[0].PreviousTransactions.FindLast(transaction => transaction.MayExecuteMore == true).Queue().Wait();
+
+            foreach(Transaction transaction in user1.Accounts[0].PreviousTransactions)
+            {
+                if(transaction.MayExecuteMore)
+                {
+                    transaction.Queue().Wait();
+                    break;
+                }
+            }
 
             Assert.AreEqual(220, user1.Accounts[0].Money, "Account didn't remove the money correctly");
         }
